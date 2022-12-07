@@ -100,7 +100,7 @@ MonoBehaviour:
   <Velocidad>k__BackingField: 0
   "_velocidadM\xEDnima": 0
   "_velocidadM\xE1xima": 50
-  _impulso:
+  _curvaDeImpulso:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3

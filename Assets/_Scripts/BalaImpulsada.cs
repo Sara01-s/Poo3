@@ -9,7 +9,7 @@ namespace SaraSanMartin {
         protected override float Velocidad { get; set; }
         [SerializeField] private float _velocidadMínima = 0f;
         [SerializeField] private float _velocidadMáxima = 15f;
-        [SerializeField] private AnimationCurve _impulso;
+        [SerializeField] private AnimationCurve _curvaDeImpulso;
 
         private float _tiempoInicial;
 
@@ -19,7 +19,7 @@ namespace SaraSanMartin {
         
         private void Update() {
             Velocidad =  Mathf.Lerp(_velocidadMínima, _velocidadMáxima, 
-                                    _impulso.Evaluate(Mathf.Sin(Time.time - _tiempoInicial)));
+                                    _curvaDeImpulso.Evaluate(Mathf.Sin(Time.time - _tiempoInicial)));
                                     
             transform.position += transform.up * (Velocidad * Time.deltaTime);
         }

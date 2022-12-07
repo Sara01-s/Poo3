@@ -97,5 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592c355ed02c1764ca3348a1392f53b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Velocidad>k__BackingField: 12
+  <Velocidad>k__BackingField: 15
   _potenciaDeGiro: 1.5
