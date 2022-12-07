@@ -3,53 +3,90 @@ using UnityEngine;
 namespace SaraSanMartin {
 
 
+    [RequireComponent(typeof(Rigidbody2D))]
     public class ControladorPersonaje2D : MonoBehaviour {
 
-        internal struct InputActual {
-            internal float Direcci髇X;
+
+        private struct InputActual {
+            internal float Direcci贸nX;
             internal bool SaltoPresionado;
-            internal bool SaltoSoltado;
+        } private InputActual _input;
+
+        
+        private Rigidbody2D _f铆sicaPersonaje;
+
+        [Header("Movimiento")]
+        [SerializeField] private float _factorDeDesaceleraci贸n;
+        [SerializeField] private float _factorDeAceleraci贸n;
+        [SerializeField] private float _velocidadHorizontal;
+        [SerializeField] private float _velocidadVertical;
+        [SerializeField] private float _m谩ximoDeVelocidad;
+
+        [Header("Salto")]
+        [SerializeField] private LayerMask _capaSuelo;
+        [SerializeField] private float _acceleraci贸nSubida;
+        [SerializeField] private float _acceleraci贸nCa铆da;
+        [SerializeField] private float _tama帽oRayoAlSuelo;
+        [SerializeField] private float _fuerzaSalto;
+
+
+        private void Awake() {
+            _f铆sicaPersonaje = GetComponent<Rigidbody2D>();
         }
-        internal InputActual _input;
-        
-        
-        internal Vector3 Direcci髇 { get; private set; }
-
-        public float _鷏timoSalto;
-        public Vector3 _鷏timaPosici髇;
-        public float _factorDeAceleraci髇, _factorDeDesaceleraci髇;
-        public float _velocidadVertical, _velocidadHorizontal;
-        public float _m醲imoDeVelocidad;
-
 
         private void Update() {
             // Calcular velocity (similar a rigidbody.velocity)
-            Direcci髇 = (transform.position - _鷏timaPosici髇) / Time.deltaTime;
-            _鷏timaPosici髇 = transform.position;
+            _input.Direcci贸nX = Input.GetAxis("Horizontal");
+            _input.SaltoPresionado = Input.GetButtonDown("Jump");
 
-            _input = new InputActual {
-                Direcci髇X = Input.GetAxis("Horizontal"),
-                SaltoPresionado = Input.GetButtonDown("Jump"),
-                SaltoSoltado = Input.GetButtonUp("Jump")
-            };
-
-            if (_input.SaltoPresionado)
-                _鷏timoSalto = Time.time;
-
-
+            var direcci贸nMovimiento = new Vector3(_velocidadHorizontal, 0f) * Time.deltaTime; 
+            transform.position += direcci贸nMovimiento;
             CalcularCaminata();
+
+            if (_input.SaltoPresionado && EnElSuelo()) {
+                _f铆sicaPersonaje.velocity = Vector2.up * _fuerzaSalto;
+            }
         }
 
-        private void CalcularCaminata() {
-            
-            if (_input.Direcci髇X != 0) {
+        private void FixedUpdate() {
+            var subiendo = _f铆sicaPersonaje.velocity.y > 0;
 
-                _velocidadHorizontal = _input.Direcci髇X * (_factorDeAceleraci髇 * Time.deltaTime);
-                _velocidadHorizontal = Mathf.Clamp(_velocidadHorizontal, -_m醲imoDeVelocidad, _m醲imoDeVelocidad);
+            if (subiendo)
+                Acelerar(_acceleraci贸nSubida);
+            else //bajando
+                Acelerar(_acceleraci贸nCa铆da);                           
+	    }
+
+
+        private void Acelerar(float magnitud) {
+            _f铆sicaPersonaje.velocity += ((Physics2D.gravity.y * (magnitud - 1)) * Time.deltaTime) * Vector2.up;
+
+            if (_f铆sicaPersonaje.velocity.y < 0f) {
+                transform.position += Vector3.zero;
+                _f铆sicaPersonaje.velocity += Vector2.zero;
+            }
+        }
+
+
+        private bool EnElSuelo() {
+            return Physics2D.Raycast(transform.position, Vector2.down, _tama帽oRayoAlSuelo, _capaSuelo);
+        }
+
+
+        private void CalcularCaminata() {
+            if (_input.Direcci贸nX != 0) {
+                _velocidadHorizontal = _input.Direcci贸nX * (_factorDeAceleraci贸n * Time.deltaTime);
+                _velocidadHorizontal = Mathf.Clamp(_velocidadHorizontal, -_m谩ximoDeVelocidad, _m谩ximoDeVelocidad);
             }
             else { // No hay input, desacelerar personaje
-                _velocidadHorizontal = Mathf.MoveTowards(_velocidadHorizontal, 0, _factorDeDesaceleraci髇 * Time.deltaTime);
+                _velocidadHorizontal = Mathf.MoveTowards(_velocidadHorizontal, 0, _factorDeDesaceleraci贸n * Time.deltaTime);
             }
+        }
+
+
+        private void OnDrawGizmos() {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(transform.position, Vector2.down * _tama帽oRayoAlSuelo);
         }
     }
 }
