@@ -8,7 +8,7 @@ namespace SaraSanMartin {
         [SerializeField] [Range(1f, 10f)] float _distanciaDeAparición;
         [SerializeField] private GameObject _objetoAInstanciar;
         [SerializeField] private Sprite[] _numeros = new Sprite[3];
-        [SerializeField] private SpriteRenderer _spriteNumero;
+        [SerializeField] private SpriteRenderer _spriteNúmero;
 
         private sbyte _iteradorDeSprites;
 
@@ -18,7 +18,7 @@ namespace SaraSanMartin {
         }
 
         private void MostrarSiguienteNúmero() {
-            _spriteNumero.sprite = _numeros[_iteradorDeSprites++ % _numeros.Length];
+            _spriteNúmero.sprite = _numeros[_iteradorDeSprites++ % _numeros.Length];
         }
 
         private void InstanciarObjeto() {

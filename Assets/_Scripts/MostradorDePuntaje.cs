@@ -6,7 +6,6 @@ namespace SaraSanMartin {
 
     internal sealed class MostradorDePuntaje : MonoBehaviour {
 
-
         private TextMeshProUGUI _uiTexto;
 
         private void Awake() {
