@@ -8,6 +8,12 @@ namespace SaraSanMartin {
 
         [SerializeField] private Bala[] _balas = new Bala[3];
         [SerializeField] private Camera _cámara;
+        [SerializeField] private Texture2D _mira;
+        
+        private void Awake() {
+            var centroMira = new Vector2 (_mira.width >> 1, _mira.height >> 1);
+            Cursor.SetCursor(_mira, centroMira, CursorMode.Auto);
+        }
 
         private void Update() {
 
