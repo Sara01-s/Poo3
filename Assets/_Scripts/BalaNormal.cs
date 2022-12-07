@@ -1,13 +1,15 @@
+using UnityEngine;
+
 namespace SaraSanMartin {
 
 
     internal sealed class BalaNormal : Bala {
 
-
-        internal override void Disparar() {
-
-            
-
+        [field: SerializeField]
+        protected override float Velocidad { get; set; }
+        
+        private void Update() {
+            transform.position += transform.up * (Velocidad * Time.deltaTime);
         }
     }
 

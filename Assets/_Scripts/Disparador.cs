@@ -7,16 +7,24 @@ namespace SaraSanMartin {
 
 
         [SerializeField] private Bala[] _balas = new Bala[3];
+        [SerializeField] private Camera _cámara;
 
         private void Update() {
+
+            var posiciónMouse = _cámara.ScreenToWorldPoint(Input.mousePosition);
+            var distanciaMouse = posiciónMouse - transform.position;
+            var rotaciónZ = Mathf.Atan2(distanciaMouse.x, distanciaMouse.y) * Mathf.Rad2Deg;
+
+            transform.rotation = Quaternion.Euler(0f, 0f, -rotaciónZ);
+
             if (GetInput("Fire1"))
-                print("Bala 1");
-                
-            else if (GetInput("Fire2"))
-                print("Bala 2");
+                Instantiate(_balas[0], transform.position, transform.rotation);
+
+            else if (GetInput("Fire2")) 
+                Instantiate(_balas[1], transform.position, transform.rotation);
                 
             else if (GetInput("Fire3"))
-                print("Bala 3");
+                Instantiate(_balas[2], transform.position, transform.rotation);
         }
 
         private bool GetInput(string input) {

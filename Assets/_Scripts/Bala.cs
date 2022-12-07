@@ -5,12 +5,11 @@ namespace SaraSanMartin {
 
     internal abstract class Bala : MonoBehaviour {
 
-
-        internal abstract void Disparar();
+        protected abstract float Velocidad { get; set; }
 
         private void OnBecameInvisible() {
             Destroy(gameObject);
         }
-
+        
     }
 }
