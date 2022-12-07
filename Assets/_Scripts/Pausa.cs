@@ -9,7 +9,6 @@ namespace SaraSanMartin {
         private bool _juegoPausado = false;
 
         public void InterrumptorDePause() {
-            print("xd");
             _juegoPausado = !_juegoPausado;
 
             _íconoContinuar.SetActive(_juegoPausado);
